@@ -11,5 +11,6 @@ typedef float_t(*floatfun_t)(float_t); // should be ( R -> [-1;1] ) most of the 
 #include "network.h"
 
 #include <iostream>
-#include <ctime>
 #include <cmath>
+#include <ctime>
+#include <random>

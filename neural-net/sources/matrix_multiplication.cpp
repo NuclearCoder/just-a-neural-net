@@ -22,7 +22,7 @@ Matrix Matrix::multiply_naive(const Matrix& other) const
 	{
 		for (uint_t j(0); j < other._nbCols; ++j)
 		{
-			result[i][j] = static_cast<float_t>(0.0F);
+			result[i][j] = 0.0F;
 			for (uint_t k(0); k < _nbCols; ++k) /*  c_(i,j) = sum( a_(i,k) * b_(k,j) )  */
 			{
 				result[i][j] += _arr[i][k] * other[k][j];
@@ -33,4 +33,4 @@ Matrix Matrix::multiply_naive(const Matrix& other) const
 }
 
 
-// TODO: strassen algorithm
+// TODO: strassen algorithm? (numerical stability)

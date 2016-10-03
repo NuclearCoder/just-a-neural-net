@@ -27,13 +27,13 @@ public:
 
 	Matrix apply(floatfun_t func) const;
 
-	inline int rowCount() const { return _nbRows; }
+	inline uint_t rowCount() const { return _nbRows; }
 	
-	inline int colCount() const { return _nbCols; }
+	inline uint_t colCount() const { return _nbCols; }
 
-	inline std::vector<float_t>& Matrix::operator[](const int i) { return _arr[i]; }
+	inline std::vector<float_t>& operator[](const int i) { return _arr[i]; }
 	
-	inline const std::vector<float_t>& Matrix::operator[](const int i) const { return _arr[i]; }
+	inline const std::vector<float_t>& operator[](const int i) const { return _arr[i]; }
 
 private:
 	bool check_mult_dim(const Matrix& other) const;

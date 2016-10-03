@@ -1,14 +1,12 @@
 #include "header.h"
 
-inline float_t randf()
-{
-	return static_cast<float_t>(rand()) / static_cast<float_t>(RAND_MAX);
-}
-
-float_t random_gaussian(float_t dev, float_t mean)
+float_t random_gaussian(float_t mean, float_t stddev)
 {
 	// this uses Box-Muller transform and polar coordinates
 	// -> avoid exp and avoid trig
+
+	static std::default_random_engine rng(static_cast<uint_t>(time(nullptr)));
+	static std::uniform_real_distribution<float_t> uniform(0.0, 1.0);
 
 	static float_t y1, y2;
 	static bool generate;
@@ -17,13 +15,13 @@ float_t random_gaussian(float_t dev, float_t mean)
 	
 	generate = !generate;
 	if (!generate)
-		return y2 * dev + mean;
+		return y2 * stddev + mean;
 
 	do
 	{
 		// polar transformation
-		x1 = static_cast<float_t>(2.0 * randf() - 1.0);
-		x2 = static_cast<float_t>(2.0 * randf() - 1.0);
+		x1 = static_cast<float_t>(2.0 * uniform(rng) - 1.0);
+		x2 = static_cast<float_t>(2.0 * uniform(rng) - 1.0);
 		w = x1 * x1 + x2 * x2;
 	} while (w >= 1.0);
 
@@ -32,5 +30,5 @@ float_t random_gaussian(float_t dev, float_t mean)
 	y1 = x1 * w;
 	y2 = x2 * w;
 
-	return y1 * dev + mean;
+	return y1 * stddev + mean;
 }

@@ -4,23 +4,27 @@
 //		too lazy to do a custom check
 
 Network::Network(const uint_t nbInputs, const uint_t nbOutputs,
-					const std::vector<Matrix> layers, const floatfun_t activation)
+					const std::vector<uint_t> layers, const floatfun_t activation)
 	: _nbInputs(nbInputs), _nbOutputs(nbOutputs), _nbLayers(layers.size()),
-		_layers(layers), _activation(activation)
+		_activation(activation)
 {
-	/* First, create the output vectors */
+	/* Create weight matrices and output vectors based on the layerSize vector */
+	_layers.reserve(_nbLayers + 1);
 	_outputs.reserve(_nbLayers + 2);
-	_outputs.push_back(Matrix(_nbInputs, 1));
-	for (uint_t l(0); l < _nbLayers; ++l)
+
+	_outputs.push_back(Matrix(nbInputs, 1));
+
+	uint_t prevSize(nbInputs);
+	for (uint_t layerSize : layers)
 	{
-		_outputs.push_back(Matrix(_layers[l].rowCount(), 1));
+		_outputs.push_back(Matrix(layerSize, 1));
+		_layers.push_back(Matrix(layerSize, prevSize));
+		prevSize = layerSize;
 	}
+
 	_outputs.push_back(Matrix(_nbOutputs, 1));
+	_layers.push_back(Matrix(_nbOutputs, prevSize));
 
-
-	/* Add the output layer's weights */
-	_layers.push_back(Matrix(_nbOutputs, _layers[_nbLayers - 1].rowCount()));
-	
 
 	/* Randomize the weights */
 	for (uint_t l(0); l < _nbLayers + 1; ++l)
@@ -68,5 +72,5 @@ float_t Network::random_weight() const
 	/* TODO: change gaussian parameters
 	 * maybe dependent on the network parameters
 	 */
-	return random_gaussian(1.0, 0.0);
+	return random_gaussian(0.0F, 1.0F);
 }

@@ -10,4 +10,4 @@ float_t sigmoid_diff(float_t x)
 {
 	float_t y = sigmoid(x);
 	return y * (1 - y);
-}
+} 

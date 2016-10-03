@@ -4,7 +4,7 @@ class Network
 {
 public:
 	Network(const uint_t nbInputs, const uint_t nbOutputs,
-			const std::vector<Matrix> layers, const floatfun_t activation);
+			const std::vector<uint_t> layers, const floatfun_t activation);
 
 	/* Passes the input through the network. */
 	Matrix compute(const Matrix& input);
@@ -26,9 +26,9 @@ private:
 	/* For each layer, the last output that
 	 * passed through.
 	 * Each output vector is a 
-	 * matrix whose size is (l_[i-1], 1)
-	 * Careful, the 0th elt is the output
-	 * from the (-1)th layer
+	 * matrix whose size is (l_[i], 1)
+	 * The 0-th elt is the input vector
+	 * The n-th elt is the output vector
 	 */
 	std::vector<Matrix> _outputs;
 	
