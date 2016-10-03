@@ -5,7 +5,8 @@ float_t random_gaussian(float_t mean, float_t stddev)
 	// this uses Box-Muller transform and polar coordinates
 	// -> avoid exp and avoid trig
 
-	static std::default_random_engine rng(static_cast<uint_t>(time(nullptr)));
+	static std::random_device rd;
+	static std::mt19937 rng(rd());
 	static std::uniform_real_distribution<float_t> uniform(0.0, 1.0);
 
 	static float_t y1, y2;
