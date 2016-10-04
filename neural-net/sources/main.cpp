@@ -1,5 +1,12 @@
 #include "header.h"
 
+std::ofstream gDebugStream("neural-net-debug.log", std::ios_base::out);
+
+std::ostream& debug()
+{
+	return gDebugStream;
+}
+
 int main(int argc, char** argv)
 {
 	(void)argc;
@@ -8,15 +15,10 @@ int main(int argc, char** argv)
 	/* net is hard-coded for testing purposes */
 
 	Matrix input(2, 1); // random input vector (1; .5)
-	input[0][0] = 1.0;
-	input[1][0] = -0.5;
+	input[0][0] = 3.1;
+	input[1][0] = -0.9;
 
-	std::vector<uint_t> layers;
-	layers.push_back(15);
-	layers.push_back(9);
-	layers.push_back(13);
-	layers.push_back(7);
-	layers.push_back(3);
+	std::vector<uint_t> layers = { 3 };
 
 	Network net(2, 1, layers, sigmoid);
 	Matrix output(net.compute(input));

@@ -1,12 +1,5 @@
 #include "header.h"
 
-std::ofstream gDebugStream("neural-debug.log");
-
-std::ostream& debug()
-{
-	return gDebugStream;
-}
-
 Network::Network(const uint_t nbInputs, const uint_t nbOutputs,
 					const std::vector<uint_t> layers, const floatfun_t actFun)
 	: _nbInputs(nbInputs), _nbOutputs(nbOutputs), _nbLayers(layers.size()),
@@ -15,19 +8,22 @@ Network::Network(const uint_t nbInputs, const uint_t nbOutputs,
 	/* Create weight matrices and output vectors based on the layerSize vector */
 	_layers.reserve(_nbLayers + 1);
 	_outputs.reserve(_nbLayers + 2);
+	_activations.reserve(_nbLayers + 1);
 
 	_outputs.push_back(Matrix(nbInputs, 1));
 
 	uint_t prevSize(nbInputs);
 	for (uint_t layerSize : layers)
 	{
-		_outputs.push_back(Matrix(layerSize, 1));
 		_layers.push_back(Matrix(layerSize, prevSize));
+		_outputs.push_back(Matrix(layerSize, 1));
+		_activations.push_back(Matrix(layerSize, 1));
 		prevSize = layerSize;
 	}
 
-	_outputs.push_back(Matrix(_nbOutputs, 1));
 	_layers.push_back(Matrix(_nbOutputs, prevSize));
+	_outputs.push_back(Matrix(_nbOutputs, 1));
+	_activations.push_back(Matrix(_nbOutputs, 1));
 
 
 	/* Randomize the weights */
@@ -61,12 +57,11 @@ Matrix Network::compute(const Matrix& input)
 	/* For each layer, the next output is the weight matrix DOT the previous output
 	 * to which is applied the activation function.
 	 */
-	_activations[0] = input;
 	_outputs[0] = input;
 	for (uint_t l(0); l < _nbLayers + 1; ++l)
 	{
-		_activations[l + 1] = _layers[l] * _outputs[l];
-		_outputs[l + 1] = _activations[l + 1].apply(_actFun);
+		_activations[l] = _layers[l] * _outputs[l];
+		_outputs[l + 1] = _activations[l].apply(_actFun);
 	}
 
 	return _outputs[_nbLayers + 1];

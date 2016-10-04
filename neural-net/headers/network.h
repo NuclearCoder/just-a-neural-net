@@ -1,7 +1,5 @@
 #pragma once
 
-std::ostream& debug();
-
 class Network
 {
 public:
@@ -37,8 +35,8 @@ private:
 	/* For each layer, the last activations. (before the activation function is applied)
 	 * Each output vector is a 
 	 * matrix whose size is (l_[i], 1)
-	 * The 0-th elt is the input vector
-	 * The n-th elt is the output activation
+	 * The 0-th elt is the first layer activation
+	 * The (n-1)-th elt is the output activation
 	 */
 	std::vector<Matrix> _activations;
 	
