@@ -23,6 +23,5 @@ int main(int argc, char** argv)
 
 	std::cout << output << std::endl;
 
-	system("pause");
 	return 0;
 }

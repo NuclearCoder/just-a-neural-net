@@ -1,12 +1,16 @@
 #include "header.h"
 
-// NOTE: most methods will throw range_error if there are no layers,
-//		too lazy to do a custom check
+std::ofstream gDebugStream("neural-debug.log");
+
+std::ostream& debug()
+{
+	return gDebugStream;
+}
 
 Network::Network(const uint_t nbInputs, const uint_t nbOutputs,
-					const std::vector<uint_t> layers, const floatfun_t activation)
+					const std::vector<uint_t> layers, const floatfun_t actFun)
 	: _nbInputs(nbInputs), _nbOutputs(nbOutputs), _nbLayers(layers.size()),
-		_activation(activation)
+		_actFun(actFun)
 {
 	/* Create weight matrices and output vectors based on the layerSize vector */
 	_layers.reserve(_nbLayers + 1);
@@ -29,7 +33,7 @@ Network::Network(const uint_t nbInputs, const uint_t nbOutputs,
 	/* Randomize the weights */
 	for (uint_t l(0); l < _nbLayers + 1; ++l)
 	{
-		std::cout << "weights[" << l << "]:" << std::endl; /*debug*/
+		debug() << "weights[" << l << "]:" << std::endl;
 
 		Matrix& layer(_layers[l]);
 		const uint_t rows(layer.rowCount());
@@ -40,13 +44,13 @@ Network::Network(const uint_t nbInputs, const uint_t nbOutputs,
 			for (uint_t j(0); j < cols; ++j)
 			{
 				layer[i][j] = random_weight();
-				std::cout << "  weights[" << i << "," << j << "]: " << layer[i][j] << std::endl; /*debug*/
+				debug() << "  weights[" << i << "," << j << "]: " << layer[i][j] << std::endl;
 			}
 		}
 
-		std::cout << std::endl; /* debug*/
+		debug() << std::endl; /* debug*/
 	}
-	std::cout << std::endl; /*debug*/
+	debug() << std::endl; /*debug*/
 }
 
 Matrix Network::compute(const Matrix& input)
@@ -57,11 +61,12 @@ Matrix Network::compute(const Matrix& input)
 	/* For each layer, the next output is the weight matrix DOT the previous output
 	 * to which is applied the activation function.
 	 */
-
+	_activations[0] = input;
 	_outputs[0] = input;
 	for (uint_t l(0); l < _nbLayers + 1; ++l)
 	{
-		_outputs[l + 1] = (_layers[l] * _outputs[l]).apply(_activation);
+		_activations[l + 1] = _layers[l] * _outputs[l];
+		_outputs[l + 1] = _activations[l + 1].apply(_actFun);
 	}
 
 	return _outputs[_nbLayers + 1];
