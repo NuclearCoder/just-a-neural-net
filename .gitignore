@@ -1,3 +1,5 @@
+*.o
+neural-net/neural-net
 
 # Created by https://www.gitignore.io/api/visualstudio
 
