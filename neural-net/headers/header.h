@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -9,7 +10,7 @@
 
 typedef float float_t;
 typedef unsigned int uint_t;
-typedef float_t(*floatfun_t)(float_t); // should be ( R -> [-1;1] ) most of the time
+typedef std::function<float(float)> floatfun_t; // should be ( R -> [-1;1] ) most of the time
 
 std::ostream& debug();
 

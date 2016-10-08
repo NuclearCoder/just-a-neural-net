@@ -39,7 +39,7 @@ Matrix Matrix::apply(floatfun_t func) const
 	{
 		for (uint_t j(0); j <_nbCols; ++j)
 		{
-			result[i][j] = (*func)(_arr[i][j]);
+			result[i][j] = func(_arr[i][j]);
 		}
 	}
 	return result;

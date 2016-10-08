@@ -57,6 +57,9 @@
     <ClCompile Include="sources\gaussian.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="sources\softplus.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\header.h">

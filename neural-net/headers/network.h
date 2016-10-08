@@ -4,10 +4,15 @@ class Network
 {
 public:
 	Network(const uint_t nbInputs, const uint_t nbOutputs,
-			const std::vector<uint_t> layers, const floatfun_t activation);
+			const std::vector<uint_t> layers,
+			const floatfun_t activation,
+			const floatfun_t activation_deriv);
 
 	/* Passes the input through the network. */
 	Matrix compute(const Matrix& input);
+
+	/* Trains the weights given the input and the training set. */
+	void train(const Matrix& input, const Matrix& expected);
 
 private:
 	float_t random_weight() const;
@@ -17,11 +22,12 @@ private:
 	const uint_t _nbLayers; // the topology of the network will be fixed during the lifetime
 
 	const floatfun_t _actFun;
+	const floatfun_t _actFunDiff;
 
 	/* For each layer, the matrix of weights
 	 * Each matrix is size (l_[i+1], l_[i])
 	 */
-	std::vector<Matrix> _layers;
+	std::vector<Matrix> _weights;
 
 	/* For each layer, the last output that
 	 * passed through.
@@ -33,17 +39,22 @@ private:
 	std::vector<Matrix> _outputs;
 
 	/* For each layer, the last activations. (before the activation function is applied)
-	 * Each output vector is a 
+	 * Each activation vector is a 
 	 * matrix whose size is (l_[i], 1)
 	 * The 0-th elt is the first layer activation
 	 * The (n-1)-th elt is the output activation
 	 */
 	std::vector<Matrix> _activations;
-	
+
+
+	std::vector<Matrix> _errors;
+
 };
 
 
 /*
+
+Tons of typos in there, don't trust yourself!
 
 Notations:
  g is the activation function

@@ -18,7 +18,7 @@ Matrix& Matrix::operator=(const Matrix copy)
 
 std::ostream& operator<<(std::ostream& out, const Matrix& mat)
 {
-	/* this will be ugly af */
+	/* this will be ugly af but who cares? */
 
 	const uint_t rows(mat.rowCount());
 	const uint_t cols(mat.colCount());
@@ -35,4 +35,21 @@ std::ostream& operator<<(std::ostream& out, const Matrix& mat)
 	}
 	out << ']';
 	return out;
+}
+
+Matrix Matrix::transpose() const
+{
+	const uint_t rows(_nbCols);
+	const uint_t cols(_nbRows);
+	Matrix result(rows, cols);
+
+	for (uint_t i(0); i < rows; ++i)
+	{
+		for (uint_t j(0); j < cols; ++j)
+		{
+			result[i][j] = _arr[j][i];
+		}
+	}
+
+	return result;
 }

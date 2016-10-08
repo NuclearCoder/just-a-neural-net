@@ -1,18 +1,31 @@
 #include "header.h"
 
+/* Hadamard product */
+
+Matrix Matrix::hadamard(const Matrix& other) const
+{
+	Matrix result(*this);
+	for (uint_t i(0); i < _nbRows; ++i)
+	{
+		for (uint_t j(0); j < _nbCols; ++j)
+		{
+			result[i][j] *= other[i][j];
+		}
+	}
+	return result;
+}
+
+
+/* classic multiplication */
+
 Matrix Matrix::operator*(const Matrix& other) const
 {
-	if (!check_mult_dim(other))
+	if (_nbCols != other._nbRows)
 	{
 		throw std::invalid_argument("Dimensions did not match");
 	} 
 	return multiply_naive(other);
 	/*  we won't have enormous matrices so stick with the naive algorithm for now (probably less than size 25x25) */
-}
-
-bool Matrix::check_mult_dim(const Matrix& other) const
-{
-	return _nbCols == other._nbRows;
 }
 
 Matrix Matrix::multiply_naive(const Matrix& other) const

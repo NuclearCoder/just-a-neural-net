@@ -2,6 +2,10 @@
 
 #include <vector>
 
+/* All the operators assume dimensions are correct,
+ * except the normal product operator
+ */
+
 class Matrix
 {
 public:
@@ -9,6 +13,15 @@ public:
 
 	Matrix(const uint_t nbRows, const uint_t nbCols);
 	Matrix(const Matrix& copy);
+
+	/* Naive transpose algorithm, heh whatever */
+	Matrix transpose() const;
+
+	/* Product term by term */
+	Matrix hadamard(const Matrix& other) const;
+	
+	/* The unsigned difference of the two matrices */
+	Matrix distance(const Matrix& other) const;
 
 	Matrix& operator=(const Matrix copy);
 
@@ -36,7 +49,6 @@ public:
 	inline const std::vector<float_t>& operator[](const int i) const { return _arr[i]; }
 
 private:
-	bool check_mult_dim(const Matrix& other) const;
 	Matrix multiply_naive(const Matrix& other) const;
 
 	const unsigned int _nbRows;
